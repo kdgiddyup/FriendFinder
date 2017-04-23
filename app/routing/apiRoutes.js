@@ -15,8 +15,9 @@ apiRouter.route("/api/friends")
         return /* res.json( friends JSON goes here ) */;
         })
     .post(function(req, res) {
-        console.log('processing survey results and running compatibility check');
-        console.log(req);
+        var incomingUser = req.body;
+        console.log(incomingUser);
+        res.json({name: 'a name',image: 'a url .jpg'});
 });
 
 module.exports = apiRouter;

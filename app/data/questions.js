@@ -34,5 +34,9 @@
         {
             question: 'Are you happy in a crowd?',
             options: ['1 (Strongly Agree)','2','3','4','5 (Strongly Disagree'] 
+      },
+        {
+            question: 'Do you live with your parents?',
+            options: ['1 (Strongly Agree)','2','3','4','5 (Strongly Disagree'] 
       }
       ];
