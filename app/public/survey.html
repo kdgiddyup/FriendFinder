@@ -16,8 +16,7 @@
 	<!-- Chosen -->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.5.1/chosen.css">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.5.1/chosen.jquery.min.js"></script>
-
-    <script src="/data/questions.js" type="text/javascript"></script>
+	<script src="questions.js" type="text/javascript"></script>
 </head>
 <body>
 
@@ -111,32 +110,28 @@
       $(selector).chosen(config[selector]);
     };
 
-    // Grab the URL of the website
-    var currentURL = window.location.origin;
     
     // when submit is clicked 
     $("#submit").on("click", function(){
 
     	// Form validation
-        var formIsValid = true;
+      var formIsValid = true;
 
     	function isValid(item) {
-            if (item === '')
-                return false
-            else
-                return true;
+            if (item === ""){
+								return false;
+						}
+            return true;
         };
 
         $(".chosen-select").each(function(){
             if (!isValid($(this).val()))
-                var formIsValid = false;
+                formIsValid = false;
         });
-
-		// All fields are filled
-		if (formIsValid)
-		{
-			// process form info
-	    	var scores = [];
+		// If all fields are filled ...
+		if (formIsValid)	{
+	    	// process form info
+				var scores = [];
             $(".chosen-select").each(function(){
                 scores.push($(this).val())
             })
@@ -144,32 +139,30 @@
 	    		name: $("#name").val(),
 	    		photo: $("#photo").val(),
 	    		scores: scores
-	    	}
+	    	};
+				console.log(thisPerson);
+				// AJAX post the data to the friends API. 
+	    	// Grab the URL of the website
+				/*
+				var thisURL = window.location.origin;
+				$.post(thisURL + "/api/friends", userData, function(data){
 
+				// Grab the result from the AJAX post so that the best match's name and photo are displayed.
+				$("#matchName").text(data.name);
+				$('#matchImg').attr("src", data.photo);
 
-	
-/*
-	    	// AJAX post the data to the friends API. 
-	    	$.post(currentURL + "/api/friends", userData, function(data){
-
-	    		// Grab the result from the AJAX post so that the best match's name and photo are displayed.
-	    		$("#matchName").text(data.name);
-	    		$('#matchImg').attr("src", data.photo);
-
-		    	// Show the modal with the best match 
-		    	$("#resultsModal").modal('toggle');
+				// Show the modal with the best match 
+				$("#resultsModal").modal('toggle');
 
 	    	});
+				*/
 		}
-		else
-		{
-			alert("Please fill out all fields before submitting!");
-		}
-    	
-    	return false;
-*/
-        }
-    });
+			else {
+				//switch to modal for production
+				alert('You must fill in all fields.') 
+			}
+
+	});
 
 
 </script>
