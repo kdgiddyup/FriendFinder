@@ -22,7 +22,7 @@
 
 	<div class="container">
 
-		<h2>Survey Questions</h2>
+		<h2>Survey Questions | <a href="/">Home</a></h2>
 		<hr>
 
 		<h3><strong>About You</strong></h3>
@@ -46,13 +46,13 @@
 		<hr>
 	    <footer class="footer">
 	      <div class="container">
-		        <p><a href="/api/friends">API Friends List</a> | <a href="https://github.com/afhaque/friendfinder">GitHub Repo</a></p>
+		        <p><a href="/api/friends">API Friends List</a> | <a href="https://github.com/kdgiddyup/FriendFinder">GitHub Repo</a></p>
 	      </div>
 	    </footer>
 
 	</div>
 
-	<!-- Modal -->
+	<!-- Result modal -->
 	<div id="resultsModal" class="modal fade" role="dialog">
 	  <div class="modal-dialog">
 
@@ -65,6 +65,28 @@
 	      <div class="modal-body">
 	        <h2 id="matchName"></h2>
 	        <img id="matchImg" width="100%" alt="">
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	      </div>
+	    </div>
+
+	  </div>
+	</div>
+
+
+	<!-- Error modal -->
+	<div id="errorModal" class="modal fade" role="dialog">
+	  <div class="modal-dialog">
+
+	    <!-- Modal content-->
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal">&times;</button>
+	        <h2 class="modal-title"><strong>Derp!</strong></h2>
+	      </div>
+	      <div class="modal-body">
+	        <h2 id="matchName">You must fill in all required fields. And they're ALL required.</h2>
 	      </div>
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -96,7 +118,7 @@
 
       
       
-      // Chosen CSS - blatantly ripped off from the demo
+      // Chosen CSS - blatantly ripped off from the demo cuz I have no idea what it all does.
     
     
     var config = {
@@ -124,42 +146,51 @@
             return true;
         };
 
-				// get inputs with "required" attribute
-				var inputs = $("select[required],input[required]");
+				// get inputs with "required" attribute 
+				var inputs = $("select[required],input[required]"); //<-- my favorite new jQuery knowledge
 
         $(inputs).each(function(){
-            if (!isValid($(this).val()))
+					// if isValid returns false for any passed-in input.val(), set formIsValid to false
+				    if (!isValid($(this).val()))
                 formIsValid = false;
         });
-		// If all fields are filled ...
+		
+		// If formIsValid survives the gauntlet, all fields are filled ...
 		if (formIsValid)	{
-	    	// process form info
+	    	//... so process form info
+				// first, we need an array to hold input scores
 				var scores = [];
-            $(".chosen-select").each(function(){
-                scores.push($(this).val())
+            // all questions have .chosen-select class, so use it to grab scores
+						$(".chosen-select").each(function(){
+                // push each question input's value into the scores array
+								scores.push($(this).val())
             })
-            var thisPerson = {
+        
+				// generate an object to represent this person
+				var thisPerson = {
 	    		name: $("#name").val(),
 	    		photo: $("#photo").val(),
 	    		scores: scores
 	    	};
-				// post the data to the friends API. 
+				
+				// post thisPerson to the friends api POST endpoint, which evaluates it against all members and returns the best match. 
 	    	// first, what is our URL?
 				var thisURL = window.location.origin;
 				$.post(thisURL + "/api/friends", thisPerson, function(data){
-					console.log(data);
-				// display match's name and photo.
+				// now we're in the response callback to display the match...
+				// match's name goes in modal window div 
 				$("#matchName").text(data.name);
+				// as does match's photo
 				$('#matchImg').attr("src", data.image);
 			
-				// Show the modal with the best match 
+				// Reveal the match 
 				$("#resultsModal").modal('toggle');
 
 	    	});
 		}
 			else {
-				//switch to modal for production
-				alert('You must fill in all fields.') 
+				// Show the error modal 
+				$("#errorModal").modal('toggle');
 			}
 
 	});
