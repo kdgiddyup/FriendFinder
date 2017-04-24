@@ -64,7 +64,7 @@
 	      </div>
 	      <div class="modal-body">
 	        <h2 id="matchName"></h2>
-	        <img id="matchImg" src="http://placehold.it/350x250" alt="">
+	        <img id="matchImg" width="100%" alt="">
 	      </div>
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -143,20 +143,17 @@
 	    		photo: $("#photo").val(),
 	    		scores: scores
 	    	};
-				console.log(thisPerson);
 				// post the data to the friends API. 
-	    	// our URL of the website
+	    	// first, what is our URL?
 				var thisURL = window.location.origin;
 				$.post(thisURL + "/api/friends", thisPerson, function(data){
-
-				// Grab the result from the AJAX post so that the best match's name and photo are displayed.
-				console.log(data);
-				/*
+					console.log(data);
+				// display match's name and photo.
 				$("#matchName").text(data.name);
-				$('#matchImg').attr("src", data.photo);
-				*/
+				$('#matchImg').attr("src", data.image);
+			
 				// Show the modal with the best match 
-				//$("#resultsModal").modal('toggle');
+				$("#resultsModal").modal('toggle');
 
 	    	});
 		}

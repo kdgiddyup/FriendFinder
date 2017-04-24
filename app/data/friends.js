@@ -1,3 +1,4 @@
+var firebase = require("firebase");
 // Initialize public Firebase
 var config = {
 apiKey: "AIzaSyB3_mhY_yIAodzxzVTAAofGmboW92aMOmU",
@@ -13,24 +14,18 @@ firebase.initializeApp(config);
 database=firebase.database();
 
 // initialize population variable, which holds survey responses; this will be populated from Firebase on page load
-var population = [];
+var members = [];
 
- // At the initial load, get a snapshot of the current data.
+ // At the initial load, get a snapshot of the current FriendFinder membership.
 database.ref().on("value", function(snapshot) {
-	var remote = snapshot.val();
-	console.log(remote);
-
-    // any data there?
-    if (remote.child("population").exists()) {
-		// store it in local population variable
-        population = remote.population
-        }
-    
+	members = snapshot.val().members;
+    console.log('logging from friends.js');
+    // make members array available to app
+    module.exports = members;
     },
     // If any errors are experienced, log them to console.
 	function(errorObject) {
         console.log("The read failed: " + errorObject.code);
     }
 );
-
 
